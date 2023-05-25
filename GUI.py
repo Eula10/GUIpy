@@ -87,6 +87,11 @@ def add_bird(main_window):
         bird_image = DragDropImage(main_window.canvas, "bird.png", x, y, bird_id, main_window)
         main_window.update_bird_counter(1)
 
+def reset_canvas(main_window):
+    main_window.canvas.delete("all")
+    main_window.bird_counter = 1
+    main_window.image1 = DragDropImage(main_window.canvas, "bird.png", 50, 50, "1", main_window)
+
 class MainWindow:
     def __init__(self):
         self.bird_counter = 1
@@ -106,6 +111,10 @@ class MainWindow:
         # Add Birds button
         add_bird_button = tk.Button(self.root, text="Add Birds", command=lambda: add_bird(self))
         add_bird_button.place(x=900, y=10)
+
+        # Reset Canvas button
+        reset_button = tk.Button(self.root, text="Reset Canvas", command=lambda: reset_canvas(self))
+        reset_button.place(x=900, y=40)
 
     def update_bird_counter(self, increment):
         self.bird_counter += increment
