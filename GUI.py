@@ -3,8 +3,9 @@ from tkinter import messagebox
 from PIL import ImageTk, Image
 
 class DragDropImage:
-    def __init__(self, canvas, image_path, x, y, bird_id):
+    def __init__(self, canvas, image_path, x, y, bird_id, main_window):
         self.canvas = canvas
+        self.main_window = main_window
         self.bird_id = bird_id
         self.image = Image.open(image_path).resize((100, 100))
         self.image_tk = ImageTk.PhotoImage(self.image)
@@ -72,34 +73,45 @@ class DragDropImage:
     def delete(self):
         self.canvas.delete(self.image_id)
         self.canvas.delete(self.text_id)
+        self.main_window.update_bird_counter(-1)
 
-def add_bird():
-    global bird_counter
-    if bird_counter < 10:
-        x = bird_counter * 150 + 50
-        y = 50
-        bird_id = str(bird_counter + 1)
-        bird_image = DragDropImage(canvas, "bird.png", x, y, bird_id)
-        bird_counter += 1
+def add_bird(main_window):
+    if main_window.bird_counter < 10:
+        if main_window.bird_counter < 5:
+            x = 50
+            y = main_window.bird_counter * 150 + 50
+        else:
+            x = 200
+            y = (main_window.bird_counter-5) * 150 + 50
+        bird_id = str(main_window.bird_counter + 1)
+        bird_image = DragDropImage(main_window.canvas, "bird.png", x, y, bird_id, main_window)
+        main_window.update_bird_counter(1)
 
-# Create the main window
-root = tk.Tk()
-root.title("Drag and Drop Images")
-root.geometry("1000x800")  # Set the initial window size to 1000x800 pixels
+class MainWindow:
+    def __init__(self):
+        self.bird_counter = 1
 
-# Create a canvas
-canvas = tk.Canvas(root)
-canvas.pack(fill=tk.BOTH, expand=True)  # Adjust the canvas size to match the window size
+        # Create the main window
+        self.root = tk.Tk()
+        self.root.title("Drag and Drop Images")
+        self.root.geometry("1000x800")  # Set the initial window size to 1000x800 pixels
 
-# Create the image objects and place them on the canvas
-image1 = DragDropImage(canvas, "bird.png", 50, 50, "1")
-image2 = DragDropImage(canvas, "bird.png", 200, 50, "2")
-image3 = DragDropImage(canvas, "bird.png", 350, 50, "3")
+        # Create a canvas
+        self.canvas = tk.Canvas(self.root)
+        self.canvas.pack(fill=tk.BOTH, expand=True)  # Adjust the canvas size to match the window size
 
-# Add Birds button
-bird_counter = 3
-add_bird_button = tk.Button(root, text="Add Birds", command=add_bird)
-add_bird_button.place(x=900, y=10)
+        # Create the image objects and place them on the canvas
+        self.image1 = DragDropImage(self.canvas, "bird.png", 50, 50, "1", self)
+
+        # Add Birds button
+        add_bird_button = tk.Button(self.root, text="Add Birds", command=lambda: add_bird(self))
+        add_bird_button.place(x=900, y=10)
+
+    def update_bird_counter(self, increment):
+        self.bird_counter += increment
+
+# Create an instance of the main window
+main_window = MainWindow()
 
 # Start the Tkinter event loop
-root.mainloop()
+main_window.root.mainloop()
