@@ -61,16 +61,16 @@ class DragDropImage:
 # Create the main window
 root = tk.Tk()
 root.title("Drag and Drop Images")
-root.geometry("400x400")
+root.geometry("1000x800")
 
 # Create a canvas
-canvas = tk.Canvas(root, width=400, height=400)
+canvas = tk.Canvas(root, width=1000, height=800)
 canvas.pack()
 
 # Create the image objects and place them on the canvas
 image1 = DragDropImage(canvas, "bird.png", 50, 50)
-image2 = DragDropImage(canvas, "bird.png", 150, 150)
-image3 = DragDropImage(canvas, "bird.png", 250, 250)
+image2 = DragDropImage(canvas, "bird.png", 50, 200)
+image3 = DragDropImage(canvas, "bird.png", 50, 350)
 
 # Start the Tkinter event loop
 root.mainloop()
