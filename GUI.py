@@ -73,6 +73,15 @@ class DragDropImage:
         self.canvas.delete(self.image_id)
         self.canvas.delete(self.text_id)
 
+def add_bird():
+    global bird_counter
+    if bird_counter < 10:
+        x = bird_counter * 150 + 50
+        y = 50
+        bird_id = str(bird_counter + 1)
+        bird_image = DragDropImage(canvas, "bird.png", x, y, bird_id)
+        bird_counter += 1
+
 # Create the main window
 root = tk.Tk()
 root.title("Drag and Drop Images")
@@ -84,8 +93,13 @@ canvas.pack(fill=tk.BOTH, expand=True)  # Adjust the canvas size to match the wi
 
 # Create the image objects and place them on the canvas
 image1 = DragDropImage(canvas, "bird.png", 50, 50, "1")
-image2 = DragDropImage(canvas, "bird.png", 150, 150, "2")
-image3 = DragDropImage(canvas, "bird.png", 250, 250, "3")
+image2 = DragDropImage(canvas, "bird.png", 200, 50, "2")
+image3 = DragDropImage(canvas, "bird.png", 350, 50, "3")
+
+# Add Birds button
+bird_counter = 3
+add_bird_button = tk.Button(root, text="Add Birds", command=add_bird)
+add_bird_button.place(x=900, y=10)
 
 # Start the Tkinter event loop
 root.mainloop()
