@@ -60,7 +60,8 @@ class DragDropImage:
         def save_properties():
             new_id = entry_id.get()
             if new_id != self.bird_id:
-                if new_id in [image.bird_id for image in [image1, image2, image3] if image != self]:
+                images = [image for image in main_window.image_objects if image != self]
+                if any(image.bird_id == new_id for image in images):
                     messagebox.showerror("Error", "ID already exists for another bird.")
                     return
                 self.bird_id = new_id
@@ -86,15 +87,18 @@ def add_bird(main_window):
         bird_id = str(main_window.bird_counter + 1)
         bird_image = DragDropImage(main_window.canvas, "bird.png", x, y, bird_id, main_window)
         main_window.update_bird_counter(1)
+        main_window.image_objects.append(bird_image)  # Add the instance to the image_objects list
 
 def reset_canvas(main_window):
     main_window.canvas.delete("all")
     main_window.bird_counter = 1
+    main_window.image_objects = []  # Reset the list of image objects
     main_window.image1 = DragDropImage(main_window.canvas, "bird.png", 50, 50, "1", main_window)
 
 class MainWindow:
     def __init__(self):
         self.bird_counter = 1
+        self.image_objects = []  # List to store instances of DragDropImage
 
         # Create the main window
         self.root = tk.Tk()
